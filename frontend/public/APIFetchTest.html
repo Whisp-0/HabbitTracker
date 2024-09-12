@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+</head>
+<body>
+    <h1>Список навыков</h1>
+    <ul id="user-list"></ul>
+
+    <script>
+        async function fetchUsers() {
+            try {
+                const response = await fetch('http://localhost:3000/users/account/Oleg/tasks');
+                if (!response.ok) {
+                    throw new Error('Сетевая ошибка: ' + response.status);
+                }
+                const userTasks = await response.json();
+                displayUsers(userTasks);
+            } catch (error) {
+                console.error('Ошибка при получении информации:', error);
+            }
+        }
+
+        function displayUsers(tasks) {
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '';
+            tasks.forEach(task => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${task.name} ${task.current_xp}/${task.requared_xp}`;
+                userList.appendChild(listItem);
+            });
+        }
+
+        window.onload = fetchUsers;
+    </script>
+</body>
+</html>
